@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.GameController">
+   <children>
+      <Label fx:id="counterLabel" layoutX="491.0" layoutY="100.0" text="0">
+         <font>
+            <Font size="32.0" />
+         </font>
+      </Label>
+      <Button layoutX="470.0" layoutY="288.0" mnemonicParsing="false" onAction="#incrementCounter" text="Click me" />
+   </children>
+</AnchorPane>

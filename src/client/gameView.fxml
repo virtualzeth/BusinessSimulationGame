@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.GameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.GameController">
    <children>
       <Label fx:id="counterLabel" layoutX="491.0" layoutY="100.0" text="0">
          <font>
@@ -12,5 +12,25 @@
          </font>
       </Label>
       <Button layoutX="470.0" layoutY="288.0" mnemonicParsing="false" onAction="#incrementCounter" text="Click me" />
+      <AnchorPane fx:id="BusinessListAnchorPane" layoutX="700.0" prefHeight="600.0" prefWidth="300.0">
+         <children>
+            <Button fx:id="businessPrevButton" layoutX="14.0" layoutY="561.0" mnemonicParsing="false" onAction="#handleBusinessListNavigationButtonAction" text="Prev" />
+            <Button fx:id="businessNextButton" layoutX="245.0" layoutY="561.0" mnemonicParsing="false" onAction="#handleBusinessListNavigationButtonAction" text="Next" />
+            <Pane fx:id="businessListPane3" prefHeight="550.0" prefWidth="300.0" style="-fx-background-color: white;">
+               <children>
+                  <Label layoutX="50.0" layoutY="50.0" text="3" />
+               </children>
+            </Pane>
+            <Pane fx:id="businessListPane2" prefHeight="550.0" prefWidth="300.0" style="-fx-background-color: white;">
+               <children>
+                  <Label layoutX="50.0" layoutY="50.0" text="2" />
+               </children>
+            </Pane>
+            <Pane fx:id="businessListPane1" prefHeight="550.0" prefWidth="300.0" style="-fx-background-color: white;">
+               <children>
+                  <Label layoutX="50.0" layoutY="50.0" text="1" />
+               </children>
+            </Pane>
+         </children></AnchorPane>
    </children>
 </AnchorPane>

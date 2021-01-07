@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.MainController">
    <children>
       <Label layoutX="278.0" layoutY="125.0" style="-fx-font-size: 36px; -fx-font-weight: 700; -fx-text-fill: #008080;" text="Business Simulation Game" />
       <Button fx:id="menu_newGame_button" layoutX="440.0" layoutY="300.0" mnemonicParsing="false" onAction="#newGame" style="-fx-background-color: #008080; -fx-border-style: none; -fx-text-fill: white; -fx-pref-width: 120px; -fx-pref-height: 40px;" text="New Game" />

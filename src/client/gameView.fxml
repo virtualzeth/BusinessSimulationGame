@@ -28,7 +28,18 @@
             </Pane>
             <Pane fx:id="businessListPane1" prefHeight="550.0" prefWidth="300.0" style="-fx-background-color: white;">
                <children>
-                  <Label layoutX="50.0" layoutY="50.0" text="1" />
+                  <Pane prefHeight="100.0" prefWidth="300.0" style="-fx-border-style: solid; -fx-border-width: 4px; -fx-border-color: #008080;">
+                     <children>
+                        <Label layoutX="48.0" layoutY="14.0" text="Soap Manufacturer">
+                           <font>
+                              <Font name="Roboto" size="24.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="buySoapManufacturerButton" layoutX="250.0" layoutY="61.0" mnemonicParsing="false" onAction="#handleBusinessBuyAction" text="Buy" />
+                        <Label fx:id="soapManufacturerCostLabel" layoutX="140.0" layoutY="65.0" text="50$" textAlignment="CENTER" />
+                        <Label fx:id="soapManufacturerOwnedLabel" layoutX="124.0" layoutY="45.0" text="Owned: 0" />
+                     </children>
+                  </Pane>
                </children>
             </Pane>
          </children></AnchorPane>

@@ -3,14 +3,23 @@ package components;
 public class Business {
     private String name;
     private int id, owned;
-    private double price, income;
+    private double cost;
+    private double income;
+    private final double incomeIncrementValue;
 
-    public Business(String name, int id, double price, double income) {
+    public Business(String name, int id, int owned, double cost, double income) {
         this.name = name;
         this.id = id;
-        this.owned = 1;
-        this.price = price;
+        this.owned = owned;
+        this.cost = cost;
         this.income = income;
+        this.incomeIncrementValue = income;
+    }
+
+    public void buy(double money) {
+        this.income += this.incomeIncrementValue;
+        this.owned++;
+        this.cost = this.cost * 1.05;
     }
 
     public String getName() {
@@ -25,8 +34,8 @@ public class Business {
         return owned;
     }
 
-    public double getPrice() {
-        return price;
+    public double getCost() {
+        return cost;
     }
 
     public double getIncome() {

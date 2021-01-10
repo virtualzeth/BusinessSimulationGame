@@ -41,4 +41,8 @@ public class Business {
     public double getIncome() {
         return income;
     }
+
+    public double getIncomeIncrementValue() {
+        return incomeIncrementValue;
+    }
 }

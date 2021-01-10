@@ -1,6 +1,7 @@
 package client;
 
 import components.Business;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,10 +20,11 @@ public class GameController implements Initializable {
     @FXML
     private Button businessPrevButton, businessNextButton, buySoapManufacturerButton;
 
-    private double money, multiplier;
+    private double money, income, multiplier;
     private int businessListCurrentPane;
     private Pane[] paneArray;
     private Business[] businessArray;
+    private Thread thread;
 
     public void handleBusinessBuyAction(ActionEvent e) {
         if(e.getSource() == buySoapManufacturerButton && this.money >= this.businessArray[0].getCost()) {
@@ -30,7 +32,8 @@ public class GameController implements Initializable {
             this.businessArray[0].buy(money);
             this.money = this.money - cost;
             this.soapManufacturerOwnedLabel.setText("Owned: " + this.businessArray[0].getOwned());
-            this.soapManufacturerCostLabel.setText(this.businessArray[0].getCost() + "$");
+            this.soapManufacturerCostLabel.setText((int) Math.ceil(this.businessArray[0].getCost()) + "$");
+            income += this.businessArray[0].getIncomeIncrementValue();
             updateCounter();
         }
     }
@@ -50,16 +53,30 @@ public class GameController implements Initializable {
     }
 
     public void updateCounter() {
-        counterLabel.setText(String.valueOf(this.money));
+        counterLabel.setText(String.valueOf((int) Math.floor(this.money)));
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         money = 50;
+        income = 0;
         multiplier = 1;
         businessListCurrentPane = 0;
         paneArray = new Pane[]{businessListPane1, businessListPane2, businessListPane3};
         businessArray = new Business[]{new Business("Soap Manufacturer", 1, 0, 50d, 0.1d)};
         updateCounter();
+
+        this.thread = new Thread(() -> {
+            while(true) {
+                this.money += this.income * 0.1;
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Platform.runLater(this::updateCounter);
+            }
+        });
+        this.thread.start();
     }
 }

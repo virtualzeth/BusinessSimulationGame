@@ -16,7 +16,7 @@ public class Business {
         this.incomeIncrementValue = income;
     }
 
-    public void buy(double money) {
+    public void buy() {
         this.income += this.incomeIncrementValue;
         this.owned++;
         this.cost = this.cost * 1.05;

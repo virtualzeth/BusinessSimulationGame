@@ -1,11 +1,10 @@
-package components;
+package client.datamodel;
 
 public class Business {
     private String name;
     private int id, owned;
-    private double cost;
-    private double income;
-    private final double incomeIncrementValue;
+    private double cost, income;
+    private double incomeIncrementValue;
 
     public Business(String name, int id, int owned, double cost, double income) {
         this.name = name;

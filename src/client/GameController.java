@@ -1,24 +1,31 @@
 package client;
 
-import components.Business;
+import client.datamodel.Business;
+import client.datamodel.Upgrade;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
+// TODO Add other fun ways to earn coins
 public class GameController implements Initializable {
     @FXML
     private Label counterLabel, cpsLabel, businessCostLabel0, businessOwnedLabel0, businessCostLabel1, businessOwnedLabel1,
             businessCostLabel2, businessOwnedLabel2, businessCostLabel3, businessOwnedLabel3, businessCostLabel4,
             businessOwnedLabel4, businessCostLabel5, businessOwnedLabel5, businessCostLabel6, businessOwnedLabel6;
     @FXML
-    private Pane businessListPane1, businessListPane2, businessListPane3;
+    private Pane businessListPane1, businessListPane2, businessListPane3, upgradeListPane;
     @FXML
     private Button businessPrevButton, businessNextButton, buyBusinessButton0, buyBusinessButton1, buyBusinessButton2,
             buyBusinessButton3, buyBusinessButton4, buyBusinessButton5, buyBusinessButton6;
@@ -28,7 +35,12 @@ public class GameController implements Initializable {
     private Pane[] paneArray;
     private Business[] businessArray;
     private Label[] businessCostLabelArray, businessOwnedLabelArray;
+    private ArrayList<Upgrade> upgradeList;
+    private final ArrayList<Pane> upgradePanes = new ArrayList<>();
 
+    public void handleUpgradeBuyAction(ActionEvent e) {
+
+    }
 
     public void handleBusinessBuyAction(ActionEvent e) {
         if(e.getSource() == buyBusinessButton0 && this.money >= this.businessArray[0].getCost()) {
@@ -95,6 +107,44 @@ public class GameController implements Initializable {
                 businessOwnedLabel3, businessOwnedLabel4, businessOwnedLabel5, businessOwnedLabel6};
         businessCostLabelArray = new Label[]{businessCostLabel0, businessCostLabel1, businessCostLabel2,
                 businessCostLabel3, businessCostLabel4, businessCostLabel5, businessCostLabel6};
+
+        upgradeList = new ArrayList<>(Arrays.asList(new Upgrade("Coffee", 200, false), new Upgrade("Extra Monitor", 10000, false)));
+
+        for (int i = 0; i < upgradeList.size(); i++) {
+            Pane pane = new Pane();
+            pane.setId("upgradePane" + i);
+            pane.setPrefWidth(300);
+            pane.setPrefHeight(100);
+            pane.setStyle("-fx-border-style: solid; -fx-border-width: 4px; -fx-border-color: #008080;");
+            pane.setLayoutY(110 * i);
+
+            Label title = new Label();
+            title.setText(upgradeList.get(i).getName());
+            title.setFont(Font.font("Roboto", 24));
+            title.setPrefWidth(200);
+            title.setLayoutX(49);
+            title.setLayoutY(14);
+            title.setAlignment(Pos.CENTER);
+
+            Label cost = new Label();
+            cost.setText((int) upgradeList.get(i).getCost() + "$");
+            cost.setPrefWidth(100);
+            cost.setLayoutX(100);
+            cost.setLayoutY(65);
+            cost.setAlignment(Pos.CENTER);
+
+            Button buy = new Button("Buy");
+            buy.setId("buyUpgradeButton" + i);
+            buy.setLayoutX(250);
+            buy.setLayoutY(61);
+
+            pane.getChildren().add(title);
+            pane.getChildren().add(cost);
+            pane.getChildren().add(buy);
+            upgradeListPane.getChildren().add(pane);
+            upgradePanes.add(pane);
+        }
+
         updateCounter();
 
         Thread thread = new Thread(() -> {

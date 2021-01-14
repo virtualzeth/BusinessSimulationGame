@@ -4,6 +4,7 @@ import client.datamodel.Business;
 import client.datamodel.Upgrade;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -37,31 +38,52 @@ public class GameController implements Initializable {
     private Label[] businessCostLabelArray, businessOwnedLabelArray;
     private ArrayList<Upgrade> upgradeList;
     private final ArrayList<Pane> upgradePanes = new ArrayList<>();
+    private final ArrayList<Button> upgradeButtons = new ArrayList<>();
 
     public void handleUpgradeBuyAction(ActionEvent e) {
-
+        Object source = e.getSource();
+        if (upgradeButtons.get(0).equals(source) && this.money >= this.upgradeList.get(0).getCost()) {
+            cursorUpgrade(0, 2);
+            moveUpgradePanes(0);
+        } else if (upgradeButtons.get(1).equals(source) && this.money >= this.upgradeList.get(1).getCost()) {
+            cursorUpgrade(1, 3);
+            moveUpgradePanes(1);
+        }
+        updateCounter();
+    }
+    private void cursorUpgrade(int index, double multiplier) {
+        this.money -= this.upgradeList.get(index).getCost();
+        this.multiplier *= multiplier;
+        upgradeListPane.getChildren().remove(upgradePanes.get(index));
+    }
+    private void moveUpgradePanes(int index) {
+        for (int i = index + 1; i < upgradePanes.size(); i++) {
+            double y = upgradePanes.get(i).getLayoutY();
+            upgradePanes.get(i).setLayoutY(y - 110);
+        }
     }
 
     public void handleBusinessBuyAction(ActionEvent e) {
-        if(e.getSource() == buyBusinessButton0 && this.money >= this.businessArray[0].getCost()) {
+        Object source = e.getSource();
+        if(source.equals(buyBusinessButton0) && this.money >= this.businessArray[0].getCost()) {
             addBusiness(0);
-        } else if(e.getSource() == buyBusinessButton1 && this.money >= this.businessArray[1].getCost()) {
+        } else if(source.equals(buyBusinessButton1) && this.money >= this.businessArray[1].getCost()) {
             addBusiness(1);
-        } else if(e.getSource() == buyBusinessButton2 && this.money >= this.businessArray[2].getCost()) {
+        } else if(source.equals(buyBusinessButton2) && this.money >= this.businessArray[2].getCost()) {
             addBusiness(2);
-        } else if(e.getSource() == buyBusinessButton3 && this.money >= this.businessArray[3].getCost()) {
+        } else if(source.equals(buyBusinessButton3) && this.money >= this.businessArray[3].getCost()) {
             addBusiness(3);
-        } else if(e.getSource() == buyBusinessButton4 && this.money >= this.businessArray[4].getCost()) {
+        } else if(source.equals(buyBusinessButton4) && this.money >= this.businessArray[4].getCost()) {
             addBusiness(4);
-        } else if(e.getSource() == buyBusinessButton5 && this.money >= this.businessArray[5].getCost()) {
+        } else if(source.equals(buyBusinessButton5) && this.money >= this.businessArray[5].getCost()) {
             addBusiness(5);
-        } else if(e.getSource() == buyBusinessButton6 && this.money >= this.businessArray[6].getCost()) {
+        } else if(source.equals(buyBusinessButton6) && this.money >= this.businessArray[6].getCost()) {
             addBusiness(6);
         }
         updateCounter();
     }
 
-    public void addBusiness(int index) {
+    private void addBusiness(int index) {
         double cost = this.businessArray[index].getCost();
         this.businessArray[index].buy();
         this.money -= cost;
@@ -80,11 +102,11 @@ public class GameController implements Initializable {
     }
 
     public void incrementCounter(ActionEvent e) {
-        this.money = this.money + 1 * this.multiplier;
+        this.money += 1 * this.multiplier;
         updateCounter();
     }
 
-    public void updateCounter() {
+    private void updateCounter() {
         counterLabel.setText(String.valueOf((int) Math.floor(this.money)));
         cpsLabel.setText((Math.floor(this.income * 10) / 10) + " CpS");
     }
@@ -108,7 +130,8 @@ public class GameController implements Initializable {
         businessCostLabelArray = new Label[]{businessCostLabel0, businessCostLabel1, businessCostLabel2,
                 businessCostLabel3, businessCostLabel4, businessCostLabel5, businessCostLabel6};
 
-        upgradeList = new ArrayList<>(Arrays.asList(new Upgrade("Coffee", 200, false), new Upgrade("Extra Monitor", 10000, false)));
+        upgradeList = new ArrayList<>(Arrays.asList(new Upgrade("Coffee Machine", 200, false, "Your productivity will increase x2"),
+                new Upgrade("Extra Monitor", 10000, false, "Your productivity will increase x3")));
 
         for (int i = 0; i < upgradeList.size(); i++) {
             Pane pane = new Pane();
@@ -126,6 +149,13 @@ public class GameController implements Initializable {
             title.setLayoutY(14);
             title.setAlignment(Pos.CENTER);
 
+            Label desc = new Label();
+            desc.setText(upgradeList.get(i).getDescription());
+            desc.setPrefWidth(280);
+            desc.setLayoutX(10);
+            desc.setLayoutY(40);
+            desc.setAlignment(Pos.CENTER);
+
             Label cost = new Label();
             cost.setText((int) upgradeList.get(i).getCost() + "$");
             cost.setPrefWidth(100);
@@ -137,8 +167,11 @@ public class GameController implements Initializable {
             buy.setId("buyUpgradeButton" + i);
             buy.setLayoutX(250);
             buy.setLayoutY(61);
+            buy.setOnAction(this::handleUpgradeBuyAction);
+            upgradeButtons.add(buy);
 
             pane.getChildren().add(title);
+            pane.getChildren().add(desc);
             pane.getChildren().add(cost);
             pane.getChildren().add(buy);
             upgradeListPane.getChildren().add(pane);

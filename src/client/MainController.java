@@ -13,7 +13,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
-    public void changeScene(ActionEvent e, String path) throws IOException {
+    private void changeScene(ActionEvent e, String path) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource(path));
         Scene scene = new Scene(parent);
         Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
@@ -22,6 +22,9 @@ public class MainController implements Initializable {
     }
     public void newGame(ActionEvent e) throws IOException {
         changeScene(e, "gameView.fxml");
+    }
+    public void loadGame(ActionEvent e) throws IOException {
+        // open modal
     }
     public void exit(ActionEvent e) {
         Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();

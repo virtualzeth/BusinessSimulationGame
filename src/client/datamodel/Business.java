@@ -2,31 +2,20 @@ package client.datamodel;
 
 public class Business {
     private String name;
-    private int id, owned;
-    private double cost, income;
-    private double incomeIncrementValue;
+    private int owned;
+    private double cost, incomeIncrementValue, initialCost;
 
-    public Business(String name, int id, int owned, double cost, double income) {
+    public Business(String name, int owned, double cost, double incomeIncrementValue) {
         this.name = name;
-        this.id = id;
         this.owned = owned;
         this.cost = cost;
-        this.income = income;
-        this.incomeIncrementValue = income;
+        this.initialCost = cost;
+        this.incomeIncrementValue = incomeIncrementValue;
     }
 
     public void buy() {
-        this.income += this.incomeIncrementValue;
         this.owned++;
-        this.cost = this.cost * 1.05;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getId() {
-        return id;
+        this.cost += this.initialCost * 0.15;
     }
 
     public int getOwned() {
@@ -35,10 +24,6 @@ public class Business {
 
     public double getCost() {
         return cost;
-    }
-
-    public double getIncome() {
-        return income;
     }
 
     public double getIncomeIncrementValue() {

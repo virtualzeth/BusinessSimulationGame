@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,13 +27,12 @@ public class GameController implements Initializable {
     @FXML
     private Pane businessListPane1, businessListPane2, businessListPane3, upgradeListPane;
     @FXML
-    private Button businessPrevButton, businessNextButton, buyBusinessButton0, buyBusinessButton1, buyBusinessButton2,
+    private Button saveAndExit, businessPrevButton, businessNextButton, buyBusinessButton0, buyBusinessButton1, buyBusinessButton2,
             buyBusinessButton3, buyBusinessButton4, buyBusinessButton5, buyBusinessButton6;
 
     private Stats stats;
     private int businessListCurrentPane;
     private Pane[] paneArray;
-    private Business[] businessArray;
     private Label[] businessCostLabelArray, businessOwnedLabelArray;
     private ArrayList<Upgrade> upgradeList;
     private final ArrayList<Pane> upgradePanes = new ArrayList<>();
@@ -63,31 +63,31 @@ public class GameController implements Initializable {
 
     public void handleBusinessBuyAction(ActionEvent e) {
         Object source = e.getSource();
-        if(source.equals(buyBusinessButton0) && this.stats.getMoney() >= this.businessArray[0].getCost()) {
+        if(source.equals(buyBusinessButton0) && this.stats.getMoney() >= this.stats.getBusiness(0).getCost()) {
             addBusiness(0);
-        } else if(source.equals(buyBusinessButton1) && this.stats.getMoney() >= this.businessArray[1].getCost()) {
+        } else if(source.equals(buyBusinessButton1) && this.stats.getMoney() >= this.stats.getBusiness(1).getCost()) {
             addBusiness(1);
-        } else if(source.equals(buyBusinessButton2) && this.stats.getMoney() >= this.businessArray[2].getCost()) {
+        } else if(source.equals(buyBusinessButton2) && this.stats.getMoney() >= this.stats.getBusiness(2).getCost()) {
             addBusiness(2);
-        } else if(source.equals(buyBusinessButton3) && this.stats.getMoney() >= this.businessArray[3].getCost()) {
+        } else if(source.equals(buyBusinessButton3) && this.stats.getMoney() >= this.stats.getBusiness(3).getCost()) {
             addBusiness(3);
-        } else if(source.equals(buyBusinessButton4) && this.stats.getMoney() >= this.businessArray[4].getCost()) {
+        } else if(source.equals(buyBusinessButton4) && this.stats.getMoney() >= this.stats.getBusiness(4).getCost()) {
             addBusiness(4);
-        } else if(source.equals(buyBusinessButton5) && this.stats.getMoney() >= this.businessArray[5].getCost()) {
+        } else if(source.equals(buyBusinessButton5) && this.stats.getMoney() >= this.stats.getBusiness(5).getCost()) {
             addBusiness(5);
-        } else if(source.equals(buyBusinessButton6) && this.stats.getMoney() >= this.businessArray[6].getCost()) {
+        } else if(source.equals(buyBusinessButton6) && this.stats.getMoney() >= this.stats.getBusiness(6).getCost()) {
             addBusiness(6);
         }
         updateCounter();
     }
 
     private void addBusiness(int index) {
-        double cost = this.businessArray[index].getCost();
-        this.businessArray[index].buy();
+        double cost = this.stats.getBusiness(index).getCost();
+        this.stats.getBusiness(index).buy();
         this.stats.subtractMoney(cost);
-        this.businessOwnedLabelArray[index].setText("Owned: " + this.businessArray[index].getOwned());
-        this.businessCostLabelArray[index].setText((int) Math.ceil(this.businessArray[index].getCost()) + "$");
-        this.stats.addIncome(this.businessArray[index].getIncomeIncrementValue());
+        this.businessOwnedLabelArray[index].setText("Owned: " + this.stats.getBusiness(index).getOwned());
+        this.businessCostLabelArray[index].setText((int) Math.ceil(this.stats.getBusiness(index).getCost()) + "$");
+        this.stats.addIncome(this.stats.getBusiness(index).getIncomeIncrementValue());
     }
 
     public void handleBusinessListNavigationButtonAction(ActionEvent e) {
@@ -113,17 +113,17 @@ public class GameController implements Initializable {
         updateCounter();
     }
 
+    public void saveAndExit() {
+        this.stats.saveGame();
+        ((Stage) saveAndExit.getScene().getWindow()).close();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         stats = new Stats(0, 0, 1);
         businessListCurrentPane = 0;
 
         paneArray = new Pane[]{businessListPane1, businessListPane2, businessListPane3};
-
-        businessArray = new Business[]{new Business("Business 1", 0, 15d, 0.1d),
-                new Business("Business 2", 0, 100d, 1d), new Business("Business 3", 0, 1100d, 8d),
-                new Business("Business 4", 0, 12000d, 47d), new Business("Business 5", 0, 130000d, 260d),
-                new Business("Business 6", 0, 1400000d, 1400d), new Business("Business 7", 0, 20000000d, 7800d)};
 
         businessOwnedLabelArray = new Label[]{businessOwnedLabel0, businessOwnedLabel1, businessOwnedLabel2,
                 businessOwnedLabel3, businessOwnedLabel4, businessOwnedLabel5, businessOwnedLabel6};

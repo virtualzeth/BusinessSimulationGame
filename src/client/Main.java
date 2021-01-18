@@ -1,6 +1,5 @@
 package client;
 
-import client.datamodel.Stats;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

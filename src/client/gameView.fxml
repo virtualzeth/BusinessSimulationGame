@@ -12,6 +12,7 @@
             <Image url="@assets/bg.png" />
          </image>
       </ImageView>
+      <Button fx:id="saveAndExit" layoutX="440.0" layoutY="546.0" mnemonicParsing="false" onAction="#saveAndExit" style="-fx-background-color: teal; -fx-text-fill: white; -fx-border-style: none; -fx-pref-height: 40px; -fx-pref-width: 120px;" text="Save &amp; Exit" />
       <Label fx:id="counterLabel" alignment="CENTER" layoutX="338.0" layoutY="120.0" prefHeight="47.0" prefWidth="324.0" text="0" textFill="WHITE">
          <font>
             <Font size="32.0" />

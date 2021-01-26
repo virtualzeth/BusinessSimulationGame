@@ -22,7 +22,7 @@ public class GameController implements Initializable {
             businessCostLabel2, businessOwnedLabel2, businessCostLabel3, businessOwnedLabel3, businessCostLabel4,
             businessOwnedLabel4, businessCostLabel5, businessOwnedLabel5, businessCostLabel6, businessOwnedLabel6;
     @FXML
-    private Pane businessListPane1, businessListPane2, businessListPane3, upgradeListPane;
+    private Pane businessListPane1, businessListPane2, upgradeListPane;
     @FXML
     private Button saveAndExit, businessPrevButton, businessNextButton, buyBusinessButton0, buyBusinessButton1, buyBusinessButton2,
             buyBusinessButton3, buyBusinessButton4, buyBusinessButton5, buyBusinessButton6;
@@ -126,7 +126,7 @@ public class GameController implements Initializable {
 
         businessListCurrentPane = 0;
 
-        paneArray = new Pane[]{businessListPane1, businessListPane2, businessListPane3};
+        paneArray = new Pane[]{businessListPane1, businessListPane2};
 
         businessOwnedLabelArray = new Label[]{businessOwnedLabel0, businessOwnedLabel1, businessOwnedLabel2,
                 businessOwnedLabel3, businessOwnedLabel4, businessOwnedLabel5, businessOwnedLabel6};

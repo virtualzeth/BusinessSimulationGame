@@ -10,7 +10,7 @@ public class Business {
         this.id = id;
         this.owned = owned;
         this.cost = cost;
-        this.initialCost = cost;
+        this.initialCost = initialCost;
         this.incomeIncrementValue = incomeIncrementValue;
     }
 

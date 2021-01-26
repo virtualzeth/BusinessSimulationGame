@@ -1,8 +1,6 @@
 package client;
 
-import client.datamodel.Business;
 import client.datamodel.Stats;
-import client.datamodel.Upgrade;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,7 +14,6 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class GameController implements Initializable {
@@ -34,27 +31,27 @@ public class GameController implements Initializable {
     private int businessListCurrentPane;
     private Pane[] paneArray;
     private Label[] businessCostLabelArray, businessOwnedLabelArray;
-    private ArrayList<Upgrade> upgradeList;
     private final ArrayList<Pane> upgradePanes = new ArrayList<>();
     private final ArrayList<Button> upgradeButtons = new ArrayList<>();
 
     public void handleUpgradeBuyAction(ActionEvent e) {
         Object source = e.getSource();
-        if (upgradeButtons.get(0).equals(source) && this.stats.getMoney() >= this.upgradeList.get(0).getCost()) {
+        if (upgradeButtons.get(0).equals(source) && this.stats.getMoney() >= this.stats.getUpgradesList().get(0).getCost()) {
             cursorUpgrade(0, 2);
             moveUpgradePanes(0);
-        } else if (upgradeButtons.get(1).equals(source) && this.stats.getMoney() >= this.upgradeList.get(1).getCost()) {
+        } else if (upgradeButtons.get(1).equals(source) && this.stats.getMoney() >= this.stats.getUpgradesList().get(1).getCost()) {
             cursorUpgrade(1, 3);
             moveUpgradePanes(1);
         }
         updateCounter();
     }
     private void cursorUpgrade(int index, double multiplier) {
-        this.stats.subtractMoney(this.upgradeList.get(index).getCost());
+        this.stats.subtractMoney(this.stats.getUpgradesList().get(index).getCost());
         this.stats.multiplyMultiplier(multiplier);
-        upgradeListPane.getChildren().remove(upgradePanes.get(index));
+        this.stats.getUpgradesList().get(index).setOwned(true);
     }
     private void moveUpgradePanes(int index) {
+        upgradeListPane.getChildren().remove(upgradePanes.get(index));
         for (int i = index + 1; i < upgradePanes.size(); i++) {
             double y = upgradePanes.get(i).getLayoutY();
             upgradePanes.get(i).setLayoutY(y - 110);
@@ -85,9 +82,13 @@ public class GameController implements Initializable {
         double cost = this.stats.getBusiness(index).getCost();
         this.stats.getBusiness(index).buy();
         this.stats.subtractMoney(cost);
+        this.updateBusinessLabels(index);
+        this.stats.addIncome(this.stats.getBusiness(index).getIncomeIncrementValue());
+    }
+
+    private void updateBusinessLabels(int index) {
         this.businessOwnedLabelArray[index].setText("Owned: " + this.stats.getBusiness(index).getOwned());
         this.businessCostLabelArray[index].setText((int) Math.ceil(this.stats.getBusiness(index).getCost()) + "$");
-        this.stats.addIncome(this.stats.getBusiness(index).getIncomeIncrementValue());
     }
 
     public void handleBusinessListNavigationButtonAction(ActionEvent e) {
@@ -116,11 +117,13 @@ public class GameController implements Initializable {
     public void saveAndExit() {
         this.stats.saveGame();
         ((Stage) saveAndExit.getScene().getWindow()).close();
+        System.exit(1);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        stats = new Stats(0, 0, 1);
+        stats = new Stats();
+
         businessListCurrentPane = 0;
 
         paneArray = new Pane[]{businessListPane1, businessListPane2, businessListPane3};
@@ -130,10 +133,7 @@ public class GameController implements Initializable {
         businessCostLabelArray = new Label[]{businessCostLabel0, businessCostLabel1, businessCostLabel2,
                 businessCostLabel3, businessCostLabel4, businessCostLabel5, businessCostLabel6};
 
-        upgradeList = new ArrayList<>(Arrays.asList(new Upgrade("Coffee Machine", 200, false, "Your productivity will increase x2"),
-                new Upgrade("Extra Monitor", 10000, false, "Your productivity will increase x3")));
-
-        for (int i = 0; i < upgradeList.size(); i++) {
+        for (int i = 0; i < this.stats.getUpgradesList().size(); i++) {
             Pane pane = new Pane();
             pane.setId("upgradePane" + i);
             pane.setPrefWidth(300);
@@ -143,7 +143,7 @@ public class GameController implements Initializable {
             pane.setLayoutY(110 * i);
 
             Label title = new Label();
-            title.setText(upgradeList.get(i).getName());
+            title.setText(this.stats.getUpgradesList().get(i).getName());
             title.setFont(Font.font("Roboto", 24));
             title.setPrefWidth(200);
             title.setLayoutX(49);
@@ -151,14 +151,14 @@ public class GameController implements Initializable {
             title.setAlignment(Pos.CENTER);
 
             Label desc = new Label();
-            desc.setText(upgradeList.get(i).getDescription());
+            desc.setText(this.stats.getUpgradesList().get(i).getDescription());
             desc.setPrefWidth(280);
             desc.setLayoutX(10);
             desc.setLayoutY(40);
             desc.setAlignment(Pos.CENTER);
 
             Label cost = new Label();
-            cost.setText((int) upgradeList.get(i).getCost() + "$");
+            cost.setText((int) this.stats.getUpgradesList().get(i).getCost() + "$");
             cost.setPrefWidth(100);
             cost.setLayoutX(100);
             cost.setLayoutY(65);
@@ -180,8 +180,16 @@ public class GameController implements Initializable {
         }
 
         updateCounter();
+        for (int i = 0; i < businessCostLabelArray.length; i++) {
+            updateBusinessLabels(i);
+        }
+        for (int i = 0; i < this.stats.getUpgradesList().size(); i++) {
+            if(this.stats.getUpgradesList().get(i).isOwned()) {
+                moveUpgradePanes(i);
+            }
+        }
 
-        Thread thread = new Thread(() -> {
+        (new Thread(() -> {
             while (true) {
                 this.stats.addMoney(this.stats.getIncome() * 0.1);
                 try {
@@ -191,7 +199,6 @@ public class GameController implements Initializable {
                 }
                 Platform.runLater(this::updateCounter);
             }
-        });
-        thread.start();
+        })).start();
     }
 }
